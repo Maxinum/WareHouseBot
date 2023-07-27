@@ -5,6 +5,10 @@ import { Orders } from 'src/order/order.model';
 import { Purchase } from 'src/purchase/purchase.model';
 config();
 
+console.log(`username: ${process.env.DB_USER}`);
+console.log(`password: ${process.env.DB_PASSWORD}`);
+console.log(`database: ${process.env.DB_NAME}`);
+
 export const databaseProviders = [
   {
     provide: 'SEQUELIZE',
