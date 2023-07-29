@@ -7,6 +7,7 @@ async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
     app.setGlobalPrefix('api');
+    app.enableCors();
     const bot = app.get(TelegramService);
     bot.startPolling();
     await app.listen(port, () =>
