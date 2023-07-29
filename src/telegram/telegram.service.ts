@@ -24,8 +24,22 @@ export class TelegramService {
   private setupActions(): void {
     this.bot.hears('All Orders', async (ctx) => {
       const userId = ctx.message?.from?.id;
-      const orders = await Orders.findAll({ where: { userId } });
-      ctx.reply('Orders: ' + JSON.stringify(orders), this.getReplyOptions());
+      const orders = await Orders.findAll({
+        where: { userId },
+        include: Product,
+      });
+
+      console.log(orders);
+      let orderMessage = 'Orders:\n';
+      orders.forEach((order, index) => {
+        orderMessage += `
+    Order #${index + 1}
+    Qty: ${order.qty}
+    Price: ${order.price}
+    `;
+      });
+
+      ctx.reply(orderMessage, this.getReplyOptions());
     });
 
     this.bot.hears('All Purchases', async (ctx) => {
