@@ -33,8 +33,8 @@ export class TelegramService {
       let orderMessage = 'All your Orders:\n';
       orders.forEach((order, index) => {
         orderMessage += `
-    Order #${index + 1}
-    Supplier:${order.product.supplier}
+    Order №${index + 1}
+    Supplier: ${order.product.supplier}
     Product: ${order.product.name}
     Qty: ${order.qty}
     Price: ${order.price}
@@ -46,11 +46,23 @@ export class TelegramService {
 
     this.bot.hears('All Purchases', async (ctx) => {
       const userId = ctx.message?.from?.id;
-      const purchases = await Purchase.findAll({ where: { userId } });
-      ctx.reply(
-        'Purchases: ' + JSON.stringify(purchases),
-        this.getReplyOptions(),
-      );
+      const purchases = await Purchase.findAll({
+        where: { userId },
+        include: Product,
+      });
+
+      let purchaseMessage = 'All your Orders:\n';
+      purchases.forEach((order, index) => {
+        purchaseMessage += `
+    Purchase №${index + 1}
+    Supplier: ${order.product.supplier}
+    Product: ${order.product.name}
+    Qty: ${order.qty}
+    Price: ${order.price}
+    `;
+      });
+
+      ctx.reply(purchaseMessage, this.getReplyOptions());
     });
 
     this.bot.hears('statistic per products', async (ctx) => {
