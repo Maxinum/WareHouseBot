@@ -37,9 +37,10 @@ export class TelegramService {
     this.bot.hears('statistic per products', async (ctx) => {
       const statistics = await Orders.findAll({
         attributes: [
-          'productId',
+          'name',
           [sequelize.fn('SUM', sequelize.col('qty')), 'totalQuantity'],
         ],
+        include: Product,
         group: ['productId'],
       });
 
@@ -102,7 +103,7 @@ export class TelegramService {
   Supplier: ${item.product.supplier}
   Product: ${item.product.name}
   Qty: ${item.qty}
-  Price: ${item.price}
+  Price: €${item.price}
   `;
     });
 
