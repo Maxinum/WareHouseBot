@@ -30,10 +30,11 @@ export class TelegramService {
       });
 
       console.log(orders);
-      let orderMessage = 'Orders:\n';
+      let orderMessage = 'All your Orders:\n';
       orders.forEach((order, index) => {
         orderMessage += `
     Order #${index + 1}
+    Supplier:${order.product.supplier}
     Product: ${order.product.name}
     Qty: ${order.qty}
     Price: ${order.price}
