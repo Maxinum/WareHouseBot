@@ -54,17 +54,9 @@ export class TelegramService {
         group: ['productId', 'product.name'],
       });
 
-      console.log(statistics);
-      let statisticsMessage = 'Product Statistics:\n';
-      statistics.forEach((item, index) => {
-        statisticsMessage += `
-        Product №${index + 1}
-        Name: ${item['product.name']}
-        Total Quantity: ${item['totalQuantity']}
-        `;
-      });
+      const message = this.createMessage(statistics);
 
-      ctx.reply(statisticsMessage, this.getReplyOptions());
+      ctx.reply(message, this.getReplyOptions());
     });
 
     this.bot.hears('statistic per suppliers', async (ctx) => {
@@ -125,5 +117,18 @@ export class TelegramService {
     });
 
     return message;
+  }
+
+  private createMessage(data) {
+    let statisticsMessage = 'Product Statistics:\n';
+    data.forEach((item, index) => {
+      statisticsMessage += `
+      Product №${index + 1}
+      Name: ${item['product.name']}
+      Total Quantity: ${item['totalQuantity']}
+      `;
+    });
+
+    return statisticsMessage;
   }
 }
