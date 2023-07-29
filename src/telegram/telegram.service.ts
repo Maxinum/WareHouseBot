@@ -35,14 +35,18 @@ export class TelegramService {
     });
 
     this.bot.hears('statistic per products', async (ctx) => {
+      const userId = ctx.message?.from?.id;
       const statistics = await Orders.findAll({
         attributes: [
           'name',
           [sequelize.fn('SUM', sequelize.col('qty')), 'totalQuantity'],
         ],
         include: Product,
+        where: { userId },
         group: ['productId'],
       });
+
+      console.log(statistics);
 
       ctx.reply(
         'Product Statistics: ' + JSON.stringify(statistics),
