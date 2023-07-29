@@ -63,7 +63,6 @@ export class TelegramService {
       try {
         const userId = ctx.message?.from?.id;
 
-        // Get total quantity in purchases
         const purchaseQuantities = await Purchase.findAll({
           attributes: [
             [sequelize.literal('product.name'), 'productName'],
@@ -80,7 +79,6 @@ export class TelegramService {
           group: ['productName'],
         });
 
-        // Get total quantity in orders
         const orderQuantities = await Orders.findAll({
           attributes: [
             [sequelize.literal('product.name'), 'productName'],
@@ -94,13 +92,11 @@ export class TelegramService {
           group: ['productName'],
         });
 
-        // Create a map to store the total quantity for each product name
         const productQuantityMap = new Map<
           string,
           { totalPurchaseQuantity: number; totalOrderQuantity: number }
         >();
 
-        // Update the map with purchase quantities
         purchaseQuantities.forEach((purchase) => {
           productQuantityMap.set(purchase.getDataValue('productName'), {
             totalPurchaseQuantity:
@@ -109,7 +105,6 @@ export class TelegramService {
           });
         });
 
-        // Update the map with order quantities
         orderQuantities.forEach((order) => {
           const productName = order.getDataValue('productName');
           if (productQuantityMap.has(productName)) {
@@ -126,13 +121,14 @@ export class TelegramService {
           }
         });
 
-        // Prepare the reply message with the total quantities for each product name
         let message = 'Quantity in stock:\n';
         productQuantityMap.forEach((quantityData, productName) => {
+          const total =
+            quantityData.totalPurchaseQuantity -
+            quantityData.totalOrderQuantity;
           message += `
-          Product Name: ${productName}
-          Total Quantity in Purchase: ${quantityData.totalPurchaseQuantity}
-          Total Quantity in Orders: ${quantityData.totalOrderQuantity}
+          Product: ${productName}
+          Quantity: ${total}
           `;
         });
 
