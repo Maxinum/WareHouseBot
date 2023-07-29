@@ -24,45 +24,14 @@ export class TelegramService {
   private setupActions(): void {
     this.bot.hears('All Orders', async (ctx) => {
       const userId = ctx.message?.from?.id;
-      const orders = await Orders.findAll({
-        where: { userId },
-        include: Product,
-      });
-
-      console.log(orders);
-      let orderMessage = 'All your Orders:\n';
-      orders.forEach((order, index) => {
-        orderMessage += `
-    Order №${index + 1}
-    Supplier: ${order.product.supplier}
-    Product: ${order.product.name}
-    Qty: ${order.qty}
-    Price: ${order.price}
-    `;
-      });
-
-      ctx.reply(orderMessage, this.getReplyOptions());
+      const message = await this.getAllItems(userId, Orders, 'Orders');
+      ctx.reply(message, this.getReplyOptions());
     });
 
     this.bot.hears('All Purchases', async (ctx) => {
       const userId = ctx.message?.from?.id;
-      const purchases = await Purchase.findAll({
-        where: { userId },
-        include: Product,
-      });
-
-      let purchaseMessage = 'All your Orders:\n';
-      purchases.forEach((order, index) => {
-        purchaseMessage += `
-    Purchase №${index + 1}
-    Supplier: ${order.product.supplier}
-    Product: ${order.product.name}
-    Qty: ${order.qty}
-    Price: ${order.price}
-    `;
-      });
-
-      ctx.reply(purchaseMessage, this.getReplyOptions());
+      const message = await this.getAllItems(userId, Purchase, 'Purchases');
+      ctx.reply(message, this.getReplyOptions());
     });
 
     this.bot.hears('statistic per products', async (ctx) => {
@@ -114,5 +83,25 @@ export class TelegramService {
 
   public startPolling(): void {
     this.bot.launch();
+  }
+
+  private async getAllItems(userId, Model, modelName) {
+    const items = await Model.findAll({
+      where: { userId },
+      include: Product,
+    });
+
+    let message = `All your ${modelName}:\n`;
+    items.forEach((item, index) => {
+      message += `
+  ${modelName} №${index + 1}
+  Supplier: ${item.product.supplier}
+  Product: ${item.product.name}
+  Qty: ${item.qty}
+  Price: ${item.price}
+  `;
+    });
+
+    return message;
   }
 }
