@@ -43,7 +43,7 @@ export class TelegramService {
       const userId = ctx.message?.from?.id;
       const statistics = await Orders.findAll({
         attributes: [
-          [sequelize.literal('Product.name'), 'Product.name'],
+          [sequelize.literal('product.name'), 'product.name'],
           [sequelize.fn('SUM', sequelize.col('qty')), 'totalQuantity'],
         ],
         include: {
@@ -51,14 +51,14 @@ export class TelegramService {
           attributes: [],
         },
         where: { userId },
-        group: ['productId', 'Product.name'],
+        group: ['productId', 'product.name'],
       });
 
       let statisticsMessage = 'Product Statistics:\n';
       statistics.forEach((item, index) => {
         statisticsMessage += `
         Product №${index + 1}
-        Name: ${item['Product.name']}
+        Name: ${item['product.name']}
         Total Quantity: ${item['totalQuantity']}
         `;
       });
