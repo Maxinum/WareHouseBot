@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Telegraf } from 'telegraf';
-// import { AppService } from 'src/app.service';
+import { Orders } from '../models/order.model';
+import { Purchase } from '../models/purchase.model';
+import { Product } from '../models/product.model';
+import sequelize from 'sequelize';
 
 @Injectable()
 export class TelegramService {
@@ -20,19 +23,50 @@ export class TelegramService {
 
   private setupActions(): void {
     this.bot.hears('All Orders', async (ctx) => {
-      ctx.reply('...');
+      const userId = ctx.message?.from?.id;
+      const orders = await Orders.findAll({ where: { userId } });
+      ctx.reply('Orders: ' + JSON.stringify(orders), this.getReplyOptions());
     });
 
     this.bot.hears('All Purchases', async (ctx) => {
-      ctx.reply('...');
+      const userId = ctx.message?.from?.id;
+      const purchases = await Purchase.findAll({ where: { userId } });
+      ctx.reply(
+        'Purchases: ' + JSON.stringify(purchases),
+        this.getReplyOptions(),
+      );
     });
 
     this.bot.hears('statistic per products', async (ctx) => {
-      ctx.reply('...');
+      const statistics = await Orders.findAll({
+        attributes: [
+          'productId',
+          [sequelize.fn('SUM', sequelize.col('quantity')), 'totalQuantity'],
+        ],
+        group: ['productId'],
+      });
+
+      // Process the 'statistics' data and send the reply
+      ctx.reply(
+        'Product Statistics: ' + JSON.stringify(statistics),
+        this.getReplyOptions(),
+      );
     });
 
     this.bot.hears('statistic per suppliers', async (ctx) => {
-      ctx.reply('...');
+      const statistics = await Purchase.findAll({
+        attributes: [
+          'supplier',
+          [sequelize.fn('SUM', sequelize.col('quantity')), 'totalQuantity'],
+        ],
+        group: ['supplier'],
+      });
+
+      // Process the 'statistics' data and send the reply
+      ctx.reply(
+        'Supplier Statistics: ' + JSON.stringify(statistics),
+        this.getReplyOptions(),
+      );
     });
   }
 
