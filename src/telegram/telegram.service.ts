@@ -49,10 +49,9 @@ export class TelegramService {
         group: ['productId', 'product.name'],
       });
 
-      console.log(statistics);
-
       let statisticsMessage = 'Product Statistics:\n';
       statistics.forEach((stat, index) => {
+        console.log(stat);
         statisticsMessage += `
     Product №${index + 1}
     Name: ${stat.getDataValue('product')}
