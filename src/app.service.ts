@@ -16,7 +16,7 @@ export class AppService {
         qty: item.qty,
         productId: item.product_id,
         price: item.price,
-        user_id: item.user_id,
+        userId: item.user_id,
       }));
 
       return Orders.bulkCreate(orderEntries);
@@ -25,7 +25,7 @@ export class AppService {
         qty: item.qty,
         productId: item.product_id,
         price: item.price,
-        user_id: item.user_id,
+        userId: item.user_id,
       }));
 
       return Purchase.bulkCreate(purchaseEntries);
