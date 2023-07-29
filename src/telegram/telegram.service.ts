@@ -41,7 +41,7 @@ export class TelegramService {
       const statistics = await Orders.findAll({
         attributes: [
           'productId',
-          [sequelize.fn('SUM', sequelize.col('quantity')), 'totalQuantity'],
+          [sequelize.fn('SUM', sequelize.col('qty')), 'totalQuantity'],
         ],
         group: ['productId'],
       });
@@ -56,7 +56,7 @@ export class TelegramService {
       const statistics = await Purchase.findAll({
         attributes: [
           'supplier',
-          [sequelize.fn('SUM', sequelize.col('quantity')), 'totalQuantity'],
+          [sequelize.fn('SUM', sequelize.col('qty')), 'totalQuantity'],
         ],
         group: ['supplier'],
       });
