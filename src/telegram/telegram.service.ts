@@ -34,6 +34,7 @@ export class TelegramService {
       orders.forEach((order, index) => {
         orderMessage += `
     Order #${index + 1}
+    Product: ${order.product.name}
     Qty: ${order.qty}
     Price: ${order.price}
     `;
