@@ -59,19 +59,88 @@ export class TelegramService {
       ctx.reply(message, this.getReplyOptions());
     });
 
-    this.bot.hears('statistic per suppliers', async (ctx) => {
-      const statistics = await Purchase.findAll({
-        attributes: [
-          'supplier',
-          [sequelize.fn('SUM', sequelize.col('qty')), 'totalQuantity'],
-        ],
-        group: ['supplier'],
-      });
+    this.bot.hears('Quantity in stock', async (ctx) => {
+      try {
+        const userId = ctx.message?.from?.id;
 
-      ctx.reply(
-        'Supplier Statistics: ' + JSON.stringify(statistics),
-        this.getReplyOptions(),
-      );
+        // Get total quantity in purchases
+        const purchaseQuantities = await Purchase.findAll({
+          attributes: [
+            [sequelize.literal('product.name'), 'productName'],
+            [
+              sequelize.fn('SUM', sequelize.col('qty')),
+              'totalPurchaseQuantity',
+            ],
+          ],
+          include: {
+            model: Product,
+            attributes: [],
+          },
+          where: { userId },
+          group: ['productName'],
+        });
+
+        // Get total quantity in orders
+        const orderQuantities = await Orders.findAll({
+          attributes: [
+            [sequelize.literal('product.name'), 'productName'],
+            [sequelize.fn('SUM', sequelize.col('qty')), 'totalOrderQuantity'],
+          ],
+          include: {
+            model: Product,
+            attributes: [],
+          },
+          where: { userId },
+          group: ['productName'],
+        });
+
+        // Create a map to store the total quantity for each product name
+        const productQuantityMap = new Map<
+          string,
+          { totalPurchaseQuantity: number; totalOrderQuantity: number }
+        >();
+
+        // Update the map with purchase quantities
+        purchaseQuantities.forEach((purchase) => {
+          productQuantityMap.set(purchase.getDataValue('productName'), {
+            totalPurchaseQuantity:
+              purchase.getDataValue('totalPurchaseQuantity') || 0,
+            totalOrderQuantity: 0,
+          });
+        });
+
+        // Update the map with order quantities
+        orderQuantities.forEach((order) => {
+          const productName = order.getDataValue('productName');
+          if (productQuantityMap.has(productName)) {
+            const existingQuantity = productQuantityMap.get(productName);
+            productQuantityMap.set(productName, {
+              ...existingQuantity,
+              totalOrderQuantity: order.getDataValue('totalOrderQuantity') || 0,
+            });
+          } else {
+            productQuantityMap.set(productName, {
+              totalPurchaseQuantity: 0,
+              totalOrderQuantity: order.getDataValue('totalOrderQuantity') || 0,
+            });
+          }
+        });
+
+        // Prepare the reply message with the total quantities for each product name
+        let message = 'Quantity in stock:\n';
+        productQuantityMap.forEach((quantityData, productName) => {
+          message += `
+          Product Name: ${productName}
+          Total Quantity in Purchase: ${quantityData.totalPurchaseQuantity}
+          Total Quantity in Orders: ${quantityData.totalOrderQuantity}
+          `;
+        });
+
+        ctx.reply(message, this.getReplyOptions());
+      } catch (error) {
+        console.error('Error:', error);
+        ctx.reply('An error occurred while fetching the quantity in stock.');
+      }
     });
   }
 
@@ -81,7 +150,7 @@ export class TelegramService {
         keyboard: [
           ['All Orders', 'All Purchases'],
           ['statistic per products'],
-          ['statistic per suppliers'],
+          ['Quantity in stock'],
         ],
         resize_keyboard: true,
         one_time_keyboard: true,
