@@ -54,6 +54,7 @@ export class TelegramService {
         group: ['productId', 'product.name'],
       });
 
+      console.log(statistics);
       let statisticsMessage = 'Product Statistics:\n';
       statistics.forEach((item, index) => {
         statisticsMessage += `
