@@ -24,13 +24,13 @@ export class TelegramService {
   private setupActions(): void {
     this.bot.hears('All Orders', async (ctx) => {
       const userId = ctx.message?.from?.id;
-      const message = await this.getAllItems(userId, Orders, 'Orders');
+      const message = await this.getAllItems(userId, Orders, 'Order');
       ctx.reply(message, this.getReplyOptions());
     });
 
     this.bot.hears('All Purchases', async (ctx) => {
       const userId = ctx.message?.from?.id;
-      const message = await this.getAllItems(userId, Purchase, 'Purchases');
+      const message = await this.getAllItems(userId, Purchase, 'Purchase');
       ctx.reply(message, this.getReplyOptions());
     });
 
@@ -85,13 +85,17 @@ export class TelegramService {
     this.bot.launch();
   }
 
-  private async getAllItems(userId, Model, modelName) {
+  private async getAllItems(
+    userId: number,
+    Model,
+    modelName: string,
+  ): Promise<string> {
     const items = await Model.findAll({
       where: { userId },
       include: Product,
     });
 
-    let message = `All your ${modelName}:\n`;
+    let message = `All your ${modelName}s:\n`;
     items.forEach((item, index) => {
       message += `
   ${modelName} №${index + 1}
