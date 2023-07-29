@@ -12,6 +12,7 @@ import { Product } from './product.model';
 export class Orders extends Model {
   @Column({
     type: DataType.INTEGER,
+    allowNull: false,
   })
   qty: number;
 

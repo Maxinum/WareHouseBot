@@ -46,7 +46,6 @@ export class TelegramService {
         group: ['productId'],
       });
 
-      // Process the 'statistics' data and send the reply
       ctx.reply(
         'Product Statistics: ' + JSON.stringify(statistics),
         this.getReplyOptions(),
@@ -62,7 +61,6 @@ export class TelegramService {
         group: ['supplier'],
       });
 
-      // Process the 'statistics' data and send the reply
       ctx.reply(
         'Supplier Statistics: ' + JSON.stringify(statistics),
         this.getReplyOptions(),
