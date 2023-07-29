@@ -38,7 +38,7 @@ export class TelegramService {
       const userId = ctx.message?.from?.id;
       const statistics = await Orders.findAll({
         attributes: [
-          [sequelize.literal('`product.name`'), 'product'],
+          [sequelize.literal('product.name'), 'product'],
           [sequelize.fn('SUM', sequelize.col('qty')), 'totalQuantity'],
         ],
         include: {
