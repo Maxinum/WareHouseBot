@@ -5,6 +5,11 @@ import { Purchase } from '../models/purchase.model';
 import { Product } from '../models/product.model';
 import sequelize from 'sequelize';
 
+interface ProductStatisticResult {
+  'Product.name': string;
+  totalQuantity: number;
+}
+
 @Injectable()
 export class TelegramService {
   private bot: Telegraf;
@@ -38,7 +43,7 @@ export class TelegramService {
       const userId = ctx.message?.from?.id;
       const statistics = await Orders.findAll({
         attributes: [
-          [sequelize.literal('product.name'), 'product'],
+          [sequelize.literal('Product.name'), 'Product.name'],
           [sequelize.fn('SUM', sequelize.col('qty')), 'totalQuantity'],
         ],
         include: {
@@ -46,17 +51,16 @@ export class TelegramService {
           attributes: [],
         },
         where: { userId },
-        group: ['productId', 'product.name'],
+        group: ['productId', 'Product.name'],
       });
 
       let statisticsMessage = 'Product Statistics:\n';
-      statistics.forEach((stat, index) => {
-        console.log(stat);
+      statistics.forEach((item, index) => {
         statisticsMessage += `
-    Product №${index + 1}
-    Name: ${stat.getDataValue('product')}
-    Total Quantity: ${stat.getDataValue('totalQuantity')}
-    `;
+        Product №${index + 1}
+        Name: ${item['Product.name']}
+        Total Quantity: ${item['totalQuantity']}
+        `;
       });
 
       ctx.reply(statisticsMessage, this.getReplyOptions());
