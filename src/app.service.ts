@@ -9,7 +9,9 @@ export class AppService {
   }
 
   async saveData(operation: string, data: any[]) {
-    if (operation === 'sale') {
+    console.log(operation);
+    console.log(data);
+    if (operation === 'Sale') {
       const orderEntries = data.map((item) => ({
         qty: item.qty,
         productId: item.product_id,
@@ -18,7 +20,7 @@ export class AppService {
       }));
 
       return Orders.bulkCreate(orderEntries);
-    } else if (operation === 'purchase') {
+    } else if (operation === 'Purchase') {
       const purchaseEntries = data.map((item) => ({
         qty: item.qty,
         productId: item.product_id,
