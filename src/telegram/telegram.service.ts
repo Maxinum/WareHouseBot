@@ -38,20 +38,29 @@ export class TelegramService {
       const userId = ctx.message?.from?.id;
       const statistics = await Orders.findAll({
         attributes: [
-          'name',
+          [sequelize.literal('`product.name`'), 'product'],
           [sequelize.fn('SUM', sequelize.col('qty')), 'totalQuantity'],
         ],
-        include: Product,
+        include: {
+          model: Product,
+          attributes: [],
+        },
         where: { userId },
-        group: ['productId'],
+        group: ['productId', 'product.name'],
       });
 
       console.log(statistics);
 
-      ctx.reply(
-        'Product Statistics: ' + JSON.stringify(statistics),
-        this.getReplyOptions(),
-      );
+      let statisticsMessage = 'Product Statistics:\n';
+      statistics.forEach((stat, index) => {
+        statisticsMessage += `
+    Product №${index + 1}
+    Name: ${stat.getDataValue('product')}
+    Total Quantity: ${stat.getDataValue('totalQuantity')}
+    `;
+      });
+
+      ctx.reply(statisticsMessage, this.getReplyOptions());
     });
 
     this.bot.hears('statistic per suppliers', async (ctx) => {
