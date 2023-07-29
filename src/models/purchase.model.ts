@@ -16,9 +16,10 @@ export class Purchase extends Model {
   qty: number;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.INTEGER,
+    allowNull: false,
   })
-  user_id: string;
+  userId: number;
 
   @Column({
     type: DataType.DECIMAL,
