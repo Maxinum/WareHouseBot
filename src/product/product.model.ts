@@ -13,7 +13,11 @@ export class Product extends Model<Product> {
   @Column({
     type: DataType.DECIMAL,
   })
-  price: number;
+  order: number;
+  @Column({
+    type: DataType.DECIMAL,
+  })
+  purchase: number;
 
   @Column({
     type: DataType.STRING,
