@@ -9,8 +9,8 @@ async function bootstrap() {
     app.setGlobalPrefix('api');
     app.enableCors();
 
-    const bot = app.get(TelegramService);
-    bot.startPolling();
+    // const bot = app.get(TelegramService);
+    // bot.startPolling();
     await app.listen(port, () =>
       console.log(`App started successfully on ${port}`),
     );

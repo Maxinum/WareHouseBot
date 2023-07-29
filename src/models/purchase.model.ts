@@ -6,7 +6,7 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import { Product } from '../product/product.model';
+import { Product } from './product.model';
 
 @Table
 export class Purchase extends Model {
@@ -14,6 +14,16 @@ export class Purchase extends Model {
     type: DataType.INTEGER,
   })
   qty: number;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  user_id: string;
+
+  @Column({
+    type: DataType.DECIMAL,
+  })
+  price: number;
 
   @ForeignKey(() => Product)
   @Column

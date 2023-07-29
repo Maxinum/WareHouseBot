@@ -1,6 +1,6 @@
 import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
-import { Orders } from '../order/order.model';
-import { Purchase } from '../purchase/purchase.model';
+import { Orders } from './order.model';
+import { Purchase } from './purchase.model';
 
 @Table
 export class Product extends Model<Product> {

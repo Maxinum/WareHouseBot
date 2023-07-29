@@ -1,13 +1,9 @@
 import { Sequelize } from 'sequelize-typescript';
 import { config } from 'dotenv';
-import { Product } from 'src/product/product.model';
-import { Orders } from 'src/order/order.model';
-import { Purchase } from 'src/purchase/purchase.model';
+import { Product } from 'src/models/product.model';
+import { Orders } from 'src/models/order.model';
+import { Purchase } from 'src/models/purchase.model';
 config();
-
-console.log(`username: ${process.env.DB_USER}`);
-console.log(`password: ${process.env.DB_PASSWORD}`);
-console.log(`database: ${process.env.DB_NAME}`);
 
 export const databaseProviders = [
   {
