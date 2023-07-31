@@ -5,11 +5,6 @@ import { Purchase } from '../models/purchase.model';
 import { Product } from '../models/product.model';
 import sequelize from 'sequelize';
 
-interface ProductStatisticResult {
-  'Product.name': string;
-  totalQuantity: number;
-}
-
 @Injectable()
 export class TelegramService {
   private bot: Telegraf;
