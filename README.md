@@ -8,6 +8,8 @@ WareHouseBot is a Telegram bot that allows you to submit your sales and purchase
  - Product Analytics: Get insights and analytics for different products.
  - Supplier Analytics: Access analytics related to suppliers of products.
 
+ ---
+
  ## 🛠️Technology Stack
 <div>
     <img src="https://github.com/devicons/devicon/blob/master/icons/nestjs/nestjs-plain.svg" title="NestJS" alt="NestJS" width="40" height="40"/>
@@ -15,6 +17,8 @@ WareHouseBot is a Telegram bot that allows you to submit your sales and purchase
     <img src="https://github.com/devicons/devicon/blob/master/icons/nodejs/nodejs-original.svg" title="NodeJS" alt="NodeJS" width="40" height="40"/>
     <img src="https://github.com/devicons/devicon/blob/master/icons/eslint/eslint-original.svg" title="Eslint" alt="Eslint" width="40" height="40"/>
 </div>
+
+ ---
 
 ## 👀Demo
 
@@ -31,6 +35,8 @@ To run the WareHouseBot locally, follow these steps:
 Start the development server:
 ### `npm run start:dev`
 Open your web browser and navigate to http://localhost to access the app.
+
+ ---
 
 ## Contributing
 
