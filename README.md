@@ -21,9 +21,7 @@ To run the WareHouseBot locally, follow these steps:
 
 1. Clone the repository to your local machine.
 2. Navigate to the project's root directory.
-3. Install the required dependencies using the package manager of your choice:
-
-## Copy code
+3. Install the required dependencies:
 
 ### `npm install`
 Start the development server:
