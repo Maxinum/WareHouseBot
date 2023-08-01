@@ -42,4 +42,4 @@ If you would like to contribute to the WareHouseBot, follow these steps:
 ## Contact
 For questions or inquiries, feel free to contact the project maintainers at sales@maxinum.co.
 
-Thank you for using the Cash Flow Web App! We hope it helps you manage your expenses effectively and gain valuable insights into your cash flow. If you encounter any issues or have suggestions for improvements, please let us know. Happy budgeting!
+Thank you for using the WarehouseBot! We hope it helps you manage your expenses effectively and gain valuable insights into your WarehouseBot. If you encounter any issues or have suggestions for improvements, please let us know. Happy budgeting!
